@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Understanding the GIS Industry — A Complete Guide</title>
+<meta name="description" content="A comprehensive guide to the GIS, Remote Sensing, and Earth Observation industry — what it is, how it works, and career paths.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#f4f1ec;color:#333;line-height:1.8}
+a{color:#5e60ce;text-decoration:none}a:hover{text-decoration:underline}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(244,241,236,0.95);backdrop-filter:blur(12px);border-bottom:1px solid #e0dbd4;padding:12px 24px;display:flex;justify-content:space-between;align-items:center}
+nav .logo{font-family:'Playfair Display',serif;font-weight:900;font-size:18px;color:#1a1a1a}
+nav .logo span{color:#5e60ce;font-size:12px;font-weight:400;font-family:'DM Sans',sans-serif;margin-left:6px;text-transform:uppercase;letter-spacing:1.5px}
+nav .links{display:flex;gap:24px;align-items:center}
+nav .links a{font-size:13px;font-weight:500;color:#555;text-decoration:none;transition:color 0.2s}
+nav .links a:hover,nav .links a.active{color:#1a1a1a}
+nav .links a.btn{background:#1a1a1a;color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;text-decoration:none}
+
+.article{max-width:760px;margin:0 auto;padding:100px 24px 80px}
+
+.article h1{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,48px);font-weight:900;color:#1a1a1a;line-height:1.2;margin-bottom:16px}
+.article .subtitle{font-size:17px;color:#666;margin-bottom:40px;line-height:1.7}
+
+.article h2{font-family:'Playfair Display',serif;font-size:clamp(20px,3vw,28px);font-weight:900;color:#1a1a1a;margin:48px 0 16px;padding-top:24px;border-top:1px solid #e0dbd4}
+.article h2:first-of-type{border-top:none;margin-top:32px}
+.article h3{font-size:18px;font-weight:700;color:#1a1a1a;margin:28px 0 10px}
+
+.article p{font-size:15px;color:#444;margin-bottom:16px;line-height:1.8}
+.article ul,.article ol{margin:0 0 16px 24px;font-size:15px;color:#444}
+.article li{margin-bottom:6px;line-height:1.7}
+
+.callout{background:#fff;border-left:4px solid #5e60ce;padding:20px 24px;border-radius:0 10px 10px 0;margin:24px 0;font-size:14px;color:#444}
+.callout strong{color:#1a1a1a}
+
+.sector-card{background:#fff;border:1px solid #e0dbd4;border-radius:12px;padding:20px 24px;margin:16px 0}
+.sector-card h4{font-size:15px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.sector-card h4 .dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.sector-card p{font-size:14px;margin-bottom:0;line-height:1.7}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin:24px 0}
+.stat-box{background:#fff;border:1px solid #e0dbd4;border-radius:10px;padding:16px;text-align:center}
+.stat-box .num{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#1a1a1a}
+.stat-box .label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.toc{background:#fff;border:1px solid #e0dbd4;border-radius:12px;padding:20px 28px;margin:24px 0}
+.toc h3{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#888;margin:0 0 12px}
+.toc ol{margin:0;padding-left:20px}
+.toc li{margin-bottom:4px;font-size:14px}
+.toc a{color:#5e60ce;text-decoration:none}
+.toc a:hover{text-decoration:underline}
+
+footer{background:#1a1a1a;color:#fff;padding:48px 24px;text-align:center}
+footer h3{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:8px}
+footer p{font-size:13px;color:#999;max-width:500px;margin:0 auto;line-height:1.6}
+footer .foot-links{margin-top:16px;display:flex;justify-content:center;gap:24px}
+footer .foot-links a{font-size:12px;color:#888;transition:color 0.2s;text-decoration:none}
+footer .foot-links a:hover{color:#fff}
+
+@media(max-width:768px){
+  nav{padding:10px 16px}
+  nav .links{gap:12px}
+  nav .links a{font-size:12px}
+  .article{padding:80px 16px 60px}
+  .stat-row{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  nav .links a:not(.btn){display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">GIS Industry<span>Explorer</span></a>
+  <div class="links">
+    <a href="index.html">Map</a>
+    <a href="industry.html" class="active">Industry Guide</a>
+    <a href="#careers" class="btn">Career Paths →</a>
+  </div>
+</nav>
+
+<div class="article">
+  <h1>Understanding the GIS &amp; Earth Observation Industry</h1>
+  <p class="subtitle">A plain-language guide to the industry that maps, monitors, and analyzes our planet — from the satellites in orbit to the software on your phone.</p>
+
+  <div class="toc">
+    <h3>In This Guide</h3>
+    <ol>
+      <li><a href="#what-is-gis">What is GIS &amp; Remote Sensing?</a></li>
+      <li><a href="#ecosystem">The Earth Observation Ecosystem</a></li>
+      <li><a href="#sectors">Key Sectors</a></li>
+      <li><a href="#evolution">How the Industry is Evolving</a></li>
+      <li><a href="#market">Market Size &amp; Growth</a></li>
+      <li><a href="#careers">Career Paths in GIS</a></li>
+    </ol>
+  </div>
+
+  <h2 id="what-is-gis">What is GIS &amp; Remote Sensing?</h2>
+
+  <p><strong>GIS (Geographic Information Systems)</strong> is technology for capturing, storing, analyzing, and visualizing location-based data. Think of it as a way to layer different types of information onto a map — population data, soil types, building footprints, flood zones — and then analyze how they relate to each other spatially.</p>
+
+  <p><strong>Remote sensing</strong> is the science of gathering information about the Earth from a distance, usually from satellites or aircraft. Instead of sending someone into a field to measure crops or flying over a forest to check for fires, we use sensors in space that capture images in visible light, infrared, radar, and other wavelengths.</p>
+
+  <p><strong>Earth observation (EO)</strong> is the broader practice of monitoring the planet using remote sensing technology. When you hear someone say they work in "EO," they're part of an industry that puts satellites in orbit, processes the data those satellites collect, and builds applications that turn that data into useful information.</p>
+
+  <div class="callout">
+    <strong>A simple analogy:</strong> Imagine Google Maps, but instead of just showing you roads and restaurants, imagine it could show you how much water stress crops are under, where illegal deforestation is happening right now, which buildings are leaking heat, or where a flood will reach in the next 6 hours. That's what this industry does.
+  </div>
+
+  <h2 id="ecosystem">The Earth Observation Ecosystem</h2>
+
+  <p>The EO industry works like a supply chain, with data flowing from space down to applications:</p>
+
+  <h3>1. Data Providers — Satellites in Orbit</h3>
+  <p>Companies like <a href="index.html">Planet</a>, <a href="index.html">Maxar</a>, and <a href="index.html">ICEYE</a> operate constellations of satellites that image the Earth continuously. Planet alone has over 200 satellites capturing the entire land surface daily. Different satellites capture different types of data:</p>
+  <ul>
+    <li><strong>Optical (visible light):</strong> Like a camera in space. Planet, Maxar, BlackSky, and Satellogic operate optical satellites.</li>
+    <li><strong>SAR (Synthetic Aperture Radar):</strong> Uses radar to "see" through clouds and at night. ICEYE, Capella Space, and Umbra operate SAR constellations.</li>
+    <li><strong>Hyperspectral:</strong> Captures hundreds of color bands (way beyond what eyes can see) to identify materials and chemicals. Pixxel, Orbital Sidekick, and Wyvern are building these.</li>
+    <li><strong>Thermal infrared:</strong> Measures heat radiation. Hydrosat, ConstellR, and SatelliteVu build thermal satellites for water stress and emissions monitoring.</li>
+  </ul>
+
+  <h3>2. Platforms &amp; Processing — Making Data Usable</h3>
+  <p>Raw satellite data isn't immediately useful — it needs to be calibrated, corrected, and processed. Companies like <a href="index.html">Sinergise</a> (Sentinel Hub), <a href="index.html">Development Seed</a>, <a href="index.html">UP42</a>, and <a href="index.html">Climate Engine</a> build platforms that make it easy to access and process satellite data at scale. Google Earth Engine and Amazon's geospatial services are major players here too.</p>
+
+  <h3>3. Analytics — Extracting Insights</h3>
+  <p>Analytics companies apply AI and machine learning to extract meaningful information from imagery. <a href="index.html">Orbital Insight</a> counts cars in parking lots to estimate retail traffic. <a href="index.html">Kayrros</a> monitors methane emissions from oil and gas facilities. <a href="index.html">Chloris Geospatial</a> measures how much carbon is stored in forests. The imagery itself is rarely the end product — the insight is.</p>
+
+  <h3>4. Applications — Solving Real Problems</h3>
+  <p>At the end of the chain, the data powers real-world decisions: farmers optimizing irrigation (<a href="index.html">Hydrosat</a>), insurance companies assessing wildfire risk (<a href="index.html">Vibrant Planet</a>), conservation organizations tracking deforestation (<a href="index.html">World Resources Institute</a>), and first responders mapping flood extents (<a href="index.html">Cloud to Street</a>).</p>
+
+  <h2 id="sectors">Key Sectors</h2>
+
+  <div class="sector-card">
+    <h4><span class="dot" style="background:#3d5a80"></span>Satellite Operators</h4>
+    <p>These companies build, launch, and operate the satellites that collect Earth observation data. The sector has been transformed by the miniaturization of satellite technology — what used to require a bus-sized satellite now fits in a shoebox. Companies range from Planet (200+ satellites, daily global coverage) to startups like Albedo (developing 10cm resolution from orbit). The trend is toward larger constellations of smaller, cheaper satellites that can provide daily or even hourly revisit rates.</p>
+  </div>
+
+  <div class="sector-card">
+    <h4><span class="dot" style="background:#5e60ce"></span>Geospatial SaaS</h4>
+    <p>Software platforms that process, analyze, and deliver geospatial data. This includes marketplaces like UP42 and SkyWatch where you can buy satellite imagery through an API, analytics platforms like Orbital Insight and Picterra that apply AI to imagery, and open source tools from Development Seed and Azavea that power much of the industry's infrastructure. Aerial imagery companies like Nearmap and EagleView also fall here.</p>
+  </div>
+
+  <div class="sector-card">
+    <h4><span class="dot" style="background:#2d6a4f"></span>Conservation Nonprofits</h4>
+    <p>Organizations like WCS, WWF, The Nature Conservancy, and Conservation International use GIS and remote sensing extensively to map habitats, monitor protected areas, track wildlife, and detect threats like poaching and deforestation. The Environmental Defense Fund even launched its own satellite (MethaneSAT) to monitor methane emissions. This sector represents some of the most impactful applications of geospatial technology.</p>
+  </div>
+
+  <div class="sector-card">
+    <h4><span class="dot" style="background:#e07a5f"></span>Climate Tech / Carbon</h4>
+    <p>A rapidly growing sector using satellite data to monitor and verify carbon credits, assess climate risk, and track emissions. Companies like Chloris Geospatial and NCX use satellites to measure forest carbon. Sylvera and BeZero rate the quality of carbon credits. ClimateAI and Sust Global forecast climate risks. This sector has exploded alongside the voluntary carbon market and growing corporate climate commitments.</p>
+  </div>
+
+  <div class="sector-card">
+    <h4><span class="dot" style="background:#6a994e"></span>Agriculture / Forestry</h4>
+    <p>Precision agriculture uses satellite and drone imagery to optimize farming at the field level. Overstory monitors vegetation for utility companies. Regrow Ag and OneSoil help farmers track crop health. Satelligence monitors supply chains for deforestation. Reforestation companies like Terraformation and Mast Reforestation use geospatial tools to plan and monitor large-scale tree planting.</p>
+  </div>
+
+  <div class="sector-card">
+    <h4><span class="dot" style="background:#a4133c"></span>Insurance / Risk</h4>
+    <p>Insurance companies increasingly rely on satellite and aerial imagery for property underwriting and catastrophe modeling. Cape Analytics and Betterview assess roof conditions from aerial photos. First Street Foundation models flood, fire, and heat risk for every U.S. property. OroraTech detects wildfires from space. Arbol offers parametric insurance that pays out automatically based on satellite-measured conditions.</p>
+  </div>
+
+  <div class="sector-card">
+    <h4><span class="dot" style="background:#577590"></span>Defense / Intelligence</h4>
+    <p>The defense and intelligence community has been the largest customer of satellite imagery for decades. Companies like 4 Earth Intelligence provide geospatial intelligence analysis, while infrastructure monitoring companies like AiDash use satellites to protect critical assets. Asterra uses SAR data to find underground water leaks — technology originally developed for defense applications.</p>
+  </div>
+
+  <div class="sector-card">
+    <h4><span class="dot" style="background:#f4a261"></span>Infrastructure / Energy</h4>
+    <p>GIS is fundamental to infrastructure planning and energy development. Terra-Gen uses spatial analysis to site renewable energy projects. LiveEO monitors pipelines and railways from space. The transition to renewable energy is driving demand for geospatial analysis to identify optimal locations for solar farms, wind turbines, and transmission lines.</p>
+  </div>
+
+  <div class="sector-card">
+    <h4><span class="dot" style="background:#bc6c25"></span>Environmental Consulting</h4>
+    <p>Engineering and consulting firms like Geosyntec and Kimley-Horn provide GIS services for environmental assessments, remediation projects, and infrastructure development. Applied Ecology conducts ecological surveys using remote sensing. The Institute for Applied Ecology focuses on native plant restoration using spatial planning tools.</p>
+  </div>
+
+  <div class="sector-card">
+    <h4><span class="dot" style="background:#9b5de5"></span>Research / Academia</h4>
+    <p>Research institutions drive innovation in the geospatial industry. Woodwell Climate Research Center studies Arctic climate change with satellites. WRI operates Global Forest Watch, one of the most impactful conservation platforms ever built. Impact Observatory produces global land cover maps. EarthRanger helps park managers protect wildlife in real time. NatureMetrics combines eDNA with spatial analysis for biodiversity monitoring.</p>
+  </div>
+
+  <h2 id="evolution">How the Industry is Evolving</h2>
+
+  <h3>AI &amp; Foundation Models</h3>
+  <p>The biggest shift in the geospatial industry is the application of AI. Foundation models — large pre-trained AI models like those being developed by companies and research institutions — can now analyze satellite imagery at a scale and speed that was impossible a few years ago. These models can automatically detect buildings, classify land cover, predict crop yields, and identify changes across entire countries. Companies like Picterra, Orbital Insight, and Impact Observatory are at the forefront of this shift.</p>
+
+  <h3>Cloud-Native Geospatial</h3>
+  <p>The industry is moving from downloading massive files to streaming data from the cloud. Standards like Cloud-Optimized GeoTIFF (COG), STAC (SpatioTemporal Asset Catalogs), and Zarr are enabling a "cloud-native" approach where you can analyze petabytes of satellite data without downloading anything. Development Seed, EOX, and the open source community are driving this transformation.</p>
+
+  <h3>Increasing Resolution &amp; Frequency</h3>
+  <p>New constellations are pushing toward higher resolution and more frequent revisits. Albedo aims for 10cm from space (previously only achievable from aircraft). Planet captures the entire Earth daily. The combination of more satellites, better sensors, and AI processing means the planet is being monitored with unprecedented detail and frequency.</p>
+
+  <h3>Democratization</h3>
+  <p>Satellite data that cost thousands of dollars per image a decade ago is now freely available (thanks to programs like ESA's Copernicus and USGS's Landsat). No-code platforms like Earth Blox and Picterra make analysis accessible to non-programmers. Open source tools from Azavea, makepath, and Development Seed lower the barrier to entry for developers.</p>
+
+  <h2 id="market">Market Size &amp; Growth</h2>
+
+  <div class="stat-row">
+    <div class="stat-box"><div class="num">$170B+</div><div class="label">Global GIS Market (2025)</div></div>
+    <div class="stat-box"><div class="num">$7.5B</div><div class="label">Satellite EO Market</div></div>
+    <div class="stat-box"><div class="num">~12%</div><div class="label">Annual Growth Rate</div></div>
+    <div class="stat-box"><div class="num">10,000+</div><div class="label">Active Satellites</div></div>
+  </div>
+
+  <p>The geospatial industry is growing rapidly, driven by the declining cost of satellite data, the rise of AI analytics, increasing demand for climate and environmental monitoring, and the digitization of industries like agriculture, insurance, and real estate. The satellite Earth observation market alone is valued at approximately $7.5 billion and growing at 10-12% annually, while the broader geospatial market (including GIS software, services, and applications) exceeds $170 billion.</p>
+
+  <p>Key growth drivers include:</p>
+  <ul>
+    <li><strong>Climate change:</strong> Growing demand for carbon monitoring, climate risk assessment, and environmental compliance</li>
+    <li><strong>ESG reporting:</strong> Companies need satellite-verified data for environmental, social, and governance commitments</li>
+    <li><strong>Insurance transformation:</strong> Property insurers shifting from inspectors to satellite/aerial imagery</li>
+    <li><strong>Precision agriculture:</strong> Farmers using satellite data to optimize inputs and reduce costs</li>
+    <li><strong>Defense modernization:</strong> Governments investing in commercial satellite intelligence</li>
+    <li><strong>Smart cities:</strong> Urban planning using high-resolution mapping and 3D digital twins</li>
+  </ul>
+
+  <h2 id="careers">Career Paths in GIS</h2>
+
+  <p>The GIS industry offers diverse career paths across science, engineering, and business:</p>
+
+  <h3>Technical Roles</h3>
+  <ul>
+    <li><strong>GIS Analyst / Specialist:</strong> Creating maps, performing spatial analysis, managing geospatial databases. Often the entry point into the industry. Tools: ArcGIS, QGIS, PostGIS, Python.</li>
+    <li><strong>Remote Sensing Scientist:</strong> Processing and analyzing satellite/aerial imagery. Requires understanding of spectral analysis, image classification, and radiometric correction.</li>
+    <li><strong>Geospatial Data Engineer:</strong> Building data pipelines and infrastructure for large-scale geospatial data. Tools: Python, cloud platforms (AWS, GCP), STAC, COGs.</li>
+    <li><strong>Geospatial ML/AI Engineer:</strong> Developing machine learning models for satellite imagery analysis — object detection, land cover classification, change detection. High demand, high pay.</li>
+    <li><strong>Geospatial Software Developer:</strong> Building mapping applications, visualization tools, and platforms. Technologies: JavaScript (Mapbox GL, Deck.gl, Leaflet), Python, cloud services.</li>
+  </ul>
+
+  <h3>Domain Roles</h3>
+  <ul>
+    <li><strong>Conservation GIS Specialist:</strong> Applying GIS to wildlife tracking, habitat mapping, and protected area management at organizations like WCS, TNC, or WWF.</li>
+    <li><strong>Agricultural Remote Sensing Analyst:</strong> Using satellite data for crop monitoring, yield prediction, and precision agriculture at companies like Regrow Ag or OneSoil.</li>
+    <li><strong>Climate/Carbon Analyst:</strong> Monitoring forests, measuring carbon, and verifying climate projects at companies like Chloris, Sylvera, or NCX.</li>
+    <li><strong>Insurance Geospatial Analyst:</strong> Assessing property risk using satellite and aerial imagery at companies like Cape Analytics or First Street.</li>
+    <li><strong>Environmental Consultant:</strong> Conducting environmental impact assessments, wetland delineations, and habitat studies at firms like Geosyntec or Kimley-Horn.</li>
+  </ul>
+
+  <h3>Business &amp; Strategy Roles</h3>
+  <ul>
+    <li><strong>Product Manager:</strong> Defining geospatial products at SaaS companies</li>
+    <li><strong>Solutions Engineer:</strong> Bridging technical and customer-facing roles</li>
+    <li><strong>Business Development:</strong> Growing satellite data and analytics sales</li>
+    <li><strong>Geospatial Program Manager:</strong> Managing large-scale mapping or monitoring programs</li>
+  </ul>
+
+  <div class="callout">
+    <strong>Getting started:</strong> A bachelor's in geography, environmental science, computer science, or Earth science is common. Many positions value hands-on experience with GIS tools (ArcGIS, QGIS), programming (Python, JavaScript), and cloud platforms. Graduate degrees are valued for research-oriented roles. The industry is growing faster than the talent pipeline, creating strong opportunities for people willing to learn.
+  </div>
+
+  <h3>Education Paths</h3>
+  <ul>
+    <li><strong>Geography / GIScience:</strong> The traditional path — programs at universities like UC Santa Barbara, Penn State, Wisconsin-Madison</li>
+    <li><strong>Environmental Science / Ecology:</strong> Strong for conservation, forestry, and environmental consulting roles</li>
+    <li><strong>Computer Science + Geospatial:</strong> In high demand for ML, engineering, and platform development roles</li>
+    <li><strong>Earth Science / Geology:</strong> Valuable for remote sensing, mining, and natural resources</li>
+    <li><strong>Self-taught / Boot camps:</strong> Increasingly viable, especially for development roles. Resources: Google Earth Engine tutorials, Coursera GIS specializations, open source geospatial community</li>
+  </ul>
+
+  <p style="margin-top:40px;font-size:14px;color:#888;text-align:center">
+    Explore all 144 companies on the <a href="index.html">Interactive Map →</a>
+  </p>
+</div>
+
+<footer>
+  <h3>Understanding the Geospatial Industry</h3>
+  <p>Built to help friends and family understand what the GIS and Earth Observation industry looks like — the companies, the technology, and why it matters.</p>
+  <div class="foot-links">
+    <a href="index.html">Interactive Map</a>
+    <a href="industry.html">Industry Guide</a>
+    <a href="#careers">Career Paths</a>
+  </div>
+</footer>
+
+</body>
+</html>
