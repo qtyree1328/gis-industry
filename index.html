@@ -208,7 +208,7 @@ footer .foot-links a:hover{color:#fff}
 </footer>
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script>
 // ============================================================
 // DATA
@@ -483,26 +483,27 @@ let simulation=null;
 function initForceGraph(){
   const container=document.getElementById('graph-2d');
   const rect=container.getBoundingClientRect();
-  const W=rect.width, H=Math.max(rect.height, 900);
+  // Use a large virtual canvas so sectors have plenty of room
+  const W=1400, H=1400;
 
   const svg=d3.select(container).append('svg').attr('viewBox',`0 0 ${W} ${H}`).attr('preserveAspectRatio','xMidYMid meet');
   const g=svg.append('g');
 
-  const zoom=d3.zoom().scaleExtent([0.2,5]).on('zoom',e=>g.attr('transform',e.transform));
+  const zoom=d3.zoom().scaleExtent([0.15,5]).on('zoom',e=>g.attr('transform',e.transform));
   svg.call(zoom);
 
-  // Category layout — spread out more for breathing room
+  // Category layout — wide spread on 1400x1400 canvas, 5 rows x 2-3 cols
   const layout={
-    'Satellite Operators':{x:0.25,y:0.10},
-    'Defense / Intelligence':{x:0.75,y:0.10},
-    'Agriculture / Forestry':{x:0.12,y:0.32},
-    'Geospatial SaaS':{x:0.50,y:0.30},
-    'Infrastructure / Energy':{x:0.88,y:0.32},
-    'Conservation Nonprofit':{x:0.12,y:0.56},
-    'Climate Tech / Carbon':{x:0.50,y:0.56},
-    'Insurance / Risk':{x:0.88,y:0.56},
-    'Research / Academia':{x:0.25,y:0.80},
-    'Environmental Consulting':{x:0.75,y:0.80},
+    'Satellite Operators':{x:0.22,y:0.08},
+    'Defense / Intelligence':{x:0.78,y:0.08},
+    'Agriculture / Forestry':{x:0.10,y:0.28},
+    'Geospatial SaaS':{x:0.50,y:0.28},
+    'Infrastructure / Energy':{x:0.90,y:0.28},
+    'Conservation Nonprofit':{x:0.10,y:0.52},
+    'Climate Tech / Carbon':{x:0.50,y:0.52},
+    'Insurance / Risk':{x:0.90,y:0.52},
+    'Research / Academia':{x:0.22,y:0.76},
+    'Environmental Consulting':{x:0.78,y:0.76},
   };
 
   const nodeRadius=d=>d.size*16;
@@ -512,8 +513,8 @@ function initForceGraph(){
     const l=layout[c.category]||{x:0.5,y:0.5};
     return{id:i,name:c.name,category:c.category,type:c.type,desc:c.desc,size:c.size,
       color:CATEGORIES[c.category]?.color||'#888',_visible:true,
-      x:l.x*W+(Math.random()-0.5)*80,
-      y:l.y*H+(Math.random()-0.5)*80,
+      x:l.x*W+(Math.random()-0.5)*120,
+      y:l.y*H+(Math.random()-0.5)*120,
       fx:null,fy:null};
   });
   forceNodes=nodes;
@@ -586,8 +587,8 @@ function initForceGraph(){
   simulation=d3.forceSimulation(nodes)
     .force('charge',d3.forceManyBody().strength(-5))
     .force('collide',d3.forceCollide().radius(d=>nodeRadius(d)+16).strength(0.9).iterations(3))
-    .force('x',d3.forceX(d=>(layout[d.category]||{x:0.5}).x*W).strength(0.12))
-    .force('y',d3.forceY(d=>(layout[d.category]||{y:0.5}).y*H).strength(0.12))
+    .force('x',d3.forceX(d=>(layout[d.category]||{x:0.5}).x*W).strength(0.18))
+    .force('y',d3.forceY(d=>(layout[d.category]||{y:0.5}).y*H).strength(0.18))
     .alphaDecay(0.02)
     .on('tick',ticked);
 
@@ -681,16 +682,21 @@ let autoRotate3d=true,spherical={theta:Math.PI/4,phi:Math.PI/3,radius:30};
 function init3D(){
   if(scene3d)return;
   const container=document.getElementById('canvas-3d');
+  // Ensure container is visible before creating WebGL context
+  container.style.display='block';
+  // Force reflow so browser computes dimensions
+  void container.offsetHeight;
   const rect=container.getBoundingClientRect();
+  const cw=rect.width||800, ch=rect.height||600;
   try{
     scene3d=new THREE.Scene();
     scene3d.background=new THREE.Color('#f4f1ec');
-    camera3d=new THREE.PerspectiveCamera(55,rect.width/rect.height,0.1,100);
-    renderer3d=new THREE.WebGLRenderer({antialias:true});
-    renderer3d.setSize(rect.width,rect.height);
+    camera3d=new THREE.PerspectiveCamera(55,cw/ch,0.1,100);
+    renderer3d=new THREE.WebGLRenderer({antialias:true,alpha:true});
+    renderer3d.setSize(cw,ch);
     renderer3d.setPixelRatio(Math.min(window.devicePixelRatio,2));
     container.appendChild(renderer3d.domElement);
-  }catch(e){return}
+  }catch(e){console.warn('WebGL init failed',e);container.innerHTML='<p style="padding:40px;text-align:center;color:#888">3D view requires WebGL support</p>';return}
 
   scene3d.add(new THREE.AmbientLight(0xffffff,0.7));
   const dl=new THREE.DirectionalLight(0xffffff,0.6);dl.position.set(8,15,8);scene3d.add(dl);
