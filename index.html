@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>The GIS Industry — 144 Companies Mapping Our World</title>
+<title>The GIS Industry Explorer</title>
 <meta name="description" content="An interactive guide to the GIS, Remote Sensing, and Earth Observation industry featuring 144 companies across 10 sectors.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
@@ -51,7 +51,7 @@ nav .links a.btn:hover{background:#333}
 
 /* GRAPH CONTAINER */
 #graph-container{width:100%;max-width:1200px;margin:0 auto;padding:0 16px;position:relative}
-#graph-2d{width:100%;aspect-ratio:16/10;background:#fff;border-radius:16px;border:1px solid #e0dbd4;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.04)}
+#graph-2d{width:100%;min-height:700px;aspect-ratio:16/12;background:#fff;border-radius:16px;border:1px solid #e0dbd4;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.04)}
 #graph-2d svg{width:100%;height:100%}
 #canvas-3d{width:100%;aspect-ratio:16/10;background:#f4f1ec;border-radius:16px;border:1px solid #e0dbd4;overflow:hidden;display:none;box-shadow:0 4px 20px rgba(0,0,0,0.04)}
 
@@ -133,7 +133,7 @@ footer .foot-links a:hover{color:#fff}
 <body>
 
 <nav>
-  <div class="logo">GIS Industry<span>Explorer</span></div>
+  <div class="logo">The GIS Industry<span>Explorer</span></div>
   <div class="links">
     <a href="index.html" class="active">Map</a>
     <a href="industry.html">Industry Guide</a>
@@ -142,7 +142,7 @@ footer .foot-links a:hover{color:#fff}
 </nav>
 
 <div class="hero">
-  <h1>The Companies Mapping<br>Our World</h1>
+  <h1>The GIS Industry<br>Explorer</h1>
   <p>An interactive guide to 144 companies across the GIS, Remote Sensing, and Earth Observation industry — from satellite operators to conservation nonprofits.</p>
   <div class="stats">
     <div class="stat"><div class="num">144</div><div class="label">Companies</div></div>
@@ -474,117 +474,169 @@ function openModal(name){
 }
 
 // ============================================================
-// 2D FORCE GRAPH (D3)
+// 2D FORCE GRAPH (D3) — with force simulation, collision avoidance, draggable nodes
 // ============================================================
 let forceNodes=null;
 let nodeSelection=null;
+let simulation=null;
 
 function initForceGraph(){
   const container=document.getElementById('graph-2d');
   const rect=container.getBoundingClientRect();
-  const W=rect.width, H=rect.height;
+  const W=rect.width, H=Math.max(rect.height, 900);
 
   const svg=d3.select(container).append('svg').attr('viewBox',`0 0 ${W} ${H}`).attr('preserveAspectRatio','xMidYMid meet');
   const g=svg.append('g');
 
-  const zoom=d3.zoom().scaleExtent([0.3,4]).on('zoom',e=>g.attr('transform',e.transform));
+  const zoom=d3.zoom().scaleExtent([0.2,5]).on('zoom',e=>g.attr('transform',e.transform));
   svg.call(zoom);
 
-  // Category layout
+  // Category layout — spread out more for breathing room
   const layout={
-    'Satellite Operators':{x:0.28,y:0.12},'Defense / Intelligence':{x:0.72,y:0.12},
-    'Agriculture / Forestry':{x:0.15,y:0.35},'Geospatial SaaS':{x:0.50,y:0.35},
-    'Infrastructure / Energy':{x:0.85,y:0.35},'Conservation Nonprofit':{x:0.15,y:0.58},
-    'Climate Tech / Carbon':{x:0.50,y:0.58},'Insurance / Risk':{x:0.85,y:0.58},
-    'Research / Academia':{x:0.28,y:0.82},'Environmental Consulting':{x:0.72,y:0.82},
+    'Satellite Operators':{x:0.25,y:0.10},
+    'Defense / Intelligence':{x:0.75,y:0.10},
+    'Agriculture / Forestry':{x:0.12,y:0.32},
+    'Geospatial SaaS':{x:0.50,y:0.30},
+    'Infrastructure / Energy':{x:0.88,y:0.32},
+    'Conservation Nonprofit':{x:0.12,y:0.56},
+    'Climate Tech / Carbon':{x:0.50,y:0.56},
+    'Insurance / Risk':{x:0.88,y:0.56},
+    'Research / Academia':{x:0.25,y:0.80},
+    'Environmental Consulting':{x:0.75,y:0.80},
   };
 
-  // Nodes
+  const nodeRadius=d=>d.size*16;
+
+  // Nodes — start at category center with jitter
   const nodes=COMPANIES.map((c,i)=>{
     const l=layout[c.category]||{x:0.5,y:0.5};
     return{id:i,name:c.name,category:c.category,type:c.type,desc:c.desc,size:c.size,
       color:CATEGORIES[c.category]?.color||'#888',_visible:true,
-      x:l.x*W+(Math.random()-0.5)*20,y:l.y*H+(Math.random()-0.5)*20};
+      x:l.x*W+(Math.random()-0.5)*80,
+      y:l.y*H+(Math.random()-0.5)*80,
+      fx:null,fy:null};
   });
   forceNodes=nodes;
-
-  // Position nodes in grid within category
-  const catGroups={};
-  nodes.forEach(n=>{if(!catGroups[n.category])catGroups[n.category]=[];catGroups[n.category].push(n)});
-  Object.entries(catGroups).forEach(([cat,group])=>{
-    const l=layout[cat];if(!l)return;
-    const cols=Math.ceil(Math.sqrt(group.length));
-    const sp=W<600?36:48;
-    group.forEach((n,i)=>{
-      const r=Math.floor(i/cols),co=i%cols;
-      n.x=l.x*W+(co-(cols-1)/2)*sp;
-      n.y=l.y*H+(r-(Math.ceil(group.length/cols)-1)/2)*sp;
-    });
-  });
 
   // Defs
   const defs=svg.append('defs');
   const shadow=defs.append('filter').attr('id','shadow').attr('x','-20%').attr('y','-20%').attr('width','140%').attr('height','140%');
   shadow.append('feDropShadow').attr('dx',0).attr('dy',2).attr('stdDeviation',4).attr('flood-color','#000').attr('flood-opacity',0.06);
-
   nodes.forEach((n,i)=>{
-    defs.append('clipPath').attr('id',`clip-${i}`).append('circle').attr('r',n.size*14);
+    defs.append('clipPath').attr('id',`clip-${i}`).append('circle').attr('r',n.size*12);
   });
 
-  // Hulls
+  // Hull group (drawn behind everything, updated on tick)
   const smoothLine=d3.line().curve(d3.curveCatmullRomClosed.alpha(0.5));
-  const hullG=g.append('g');
+  const hullG=g.append('g').attr('class','hulls');
+  const hullPaths={};
+  const hullLabels={};
   Object.entries(CATEGORIES).forEach(([cat,catData])=>{
-    const catNodes=nodes.filter(n=>n.category===cat);
-    if(!catNodes.length)return;
-    const points=catNodes.map(n=>[n.x,n.y]);
-    const hull=computeHull(points,35);
-    if(hull){
-      hullG.append('path').attr('d',smoothLine(hull)).attr('fill',catData.color).attr('fill-opacity',0.07)
-        .attr('stroke',catData.color).attr('stroke-width',2).attr('stroke-opacity',0.3).attr('stroke-linejoin','round').attr('filter','url(#shadow)');
-    }
-    // Label
-    const cx=d3.mean(catNodes,n=>n.x);
-    const minY=d3.min(catNodes,n=>n.y);
+    hullPaths[cat]=hullG.append('path')
+      .attr('fill',catData.color).attr('fill-opacity',0.06)
+      .attr('stroke',catData.color).attr('stroke-width',1.5).attr('stroke-opacity',0.25)
+      .attr('stroke-linejoin','round').attr('filter','url(#shadow)');
     const lg=hullG.append('g');
-    const tw=cat.length*6+16;
-    lg.append('rect').attr('x',cx-tw/2).attr('y',minY-48).attr('width',tw).attr('height',22)
-      .attr('rx',6).attr('fill','#fffdf8').attr('fill-opacity',0.92).attr('stroke',catData.color).attr('stroke-width',1).attr('stroke-opacity',0.4);
-    lg.append('text').attr('x',cx).attr('y',minY-33).attr('text-anchor','middle')
-      .attr('font-family','DM Sans,sans-serif').attr('font-size',10).attr('font-weight',600).attr('fill',catData.color).text(cat);
+    hullLabels[cat]={g:lg,
+      rect:lg.append('rect').attr('rx',6).attr('fill','#fffdf8').attr('fill-opacity',0.92)
+        .attr('stroke',catData.color).attr('stroke-width',1).attr('stroke-opacity',0.35),
+      text:lg.append('text').attr('text-anchor','middle')
+        .attr('font-family','DM Sans,sans-serif').attr('font-size',10).attr('font-weight',600)
+        .attr('fill',catData.color).text(cat)
+    };
   });
 
-  // Inter-category connections
-  const rels={'Satellite Operators':['Geospatial SaaS','Defense / Intelligence'],'Geospatial SaaS':['Climate Tech / Carbon','Insurance / Risk','Research / Academia'],
-    'Conservation Nonprofit':['Research / Academia','Agriculture / Forestry','Climate Tech / Carbon'],'Climate Tech / Carbon':['Agriculture / Forestry','Insurance / Risk'],
-    'Agriculture / Forestry':['Environmental Consulting'],'Environmental Consulting':['Infrastructure / Energy','Research / Academia'],
+  // Inter-category connection lines
+  const rels={'Satellite Operators':['Geospatial SaaS','Defense / Intelligence'],
+    'Geospatial SaaS':['Climate Tech / Carbon','Insurance / Risk','Research / Academia'],
+    'Conservation Nonprofit':['Research / Academia','Agriculture / Forestry','Climate Tech / Carbon'],
+    'Climate Tech / Carbon':['Agriculture / Forestry','Insurance / Risk'],
+    'Agriculture / Forestry':['Environmental Consulting'],
+    'Environmental Consulting':['Infrastructure / Energy','Research / Academia'],
     'Insurance / Risk':['Infrastructure / Energy'],'Defense / Intelligence':['Geospatial SaaS']};
-  const drawn=new Set();
+  const drawnEdges=new Set();
   const connG=g.insert('g',':first-child');
+  const connLines=[];
   Object.entries(rels).forEach(([cat,related])=>{
-    const from=layout[cat];if(!from)return;
     related.forEach(rc=>{
-      const to=layout[rc];if(!to)return;
-      const key=[cat,rc].sort().join('|');if(drawn.has(key))return;drawn.add(key);
-      connG.append('line').attr('x1',from.x*W).attr('y1',from.y*H).attr('x2',to.x*W).attr('y2',to.y*H)
-        .attr('stroke','#d4cfc6').attr('stroke-width',2).attr('stroke-opacity',0.3).attr('stroke-dasharray','6,4');
+      const key=[cat,rc].sort().join('|');
+      if(drawnEdges.has(key))return;drawnEdges.add(key);
+      const line=connG.append('line')
+        .attr('stroke','#d4cfc6').attr('stroke-width',1.5).attr('stroke-opacity',0.2).attr('stroke-dasharray','6,4');
+      connLines.push({cat,rc,line});
     });
   });
 
-  // Nodes
-  const node=g.append('g').selectAll('g').data(nodes).join('g').attr('cursor','pointer')
-    .attr('transform',d=>`translate(${d.x},${d.y})`);
+  // Node groups
+  const node=g.append('g').selectAll('g').data(nodes).join('g').attr('cursor','grab');
 
-  node.append('circle').attr('r',d=>d.size*18).attr('fill',d=>d.color);
-  node.append('circle').attr('r',d=>d.size*14).attr('fill','#fff');
+  node.append('circle').attr('r',d=>nodeRadius(d)+3).attr('fill',d=>d.color);
+  node.append('circle').attr('r',d=>d.size*12).attr('fill','#fff');
   node.append('image').attr('xlink:href',d=>favicon({name:d.name}))
-    .attr('x',d=>-d.size*12).attr('y',d=>-d.size*12).attr('width',d=>d.size*24).attr('height',d=>d.size*24)
+    .attr('x',d=>-d.size*10).attr('y',d=>-d.size*10)
+    .attr('width',d=>d.size*20).attr('height',d=>d.size*20)
     .attr('clip-path',(d,i)=>`url(#clip-${i})`).on('error',function(){d3.select(this).remove()});
-  node.append('text').attr('text-anchor','middle').attr('dy',d=>d.size*24)
-    .attr('font-size',W<600?8:9).attr('font-family','DM Sans,sans-serif').attr('fill','#555')
-    .text(d=>d.name.length>16?d.name.slice(0,15)+'…':d.name);
+  node.append('text').attr('text-anchor','middle').attr('dy',d=>nodeRadius(d)+14)
+    .attr('font-size',9).attr('font-family','DM Sans,sans-serif').attr('font-weight',500).attr('fill','#444')
+    .text(d=>d.name.length>18?d.name.slice(0,17)+'…':d.name);
 
   nodeSelection=node;
+
+  // FORCE SIMULATION
+  simulation=d3.forceSimulation(nodes)
+    .force('charge',d3.forceManyBody().strength(-5))
+    .force('collide',d3.forceCollide().radius(d=>nodeRadius(d)+16).strength(0.9).iterations(3))
+    .force('x',d3.forceX(d=>(layout[d.category]||{x:0.5}).x*W).strength(0.12))
+    .force('y',d3.forceY(d=>(layout[d.category]||{y:0.5}).y*H).strength(0.12))
+    .alphaDecay(0.02)
+    .on('tick',ticked);
+
+  function ticked(){
+    // Update node positions
+    node.attr('transform',d=>`translate(${d.x},${d.y})`);
+
+    // Update hulls
+    Object.entries(CATEGORIES).forEach(([cat,catData])=>{
+      const catNodes=nodes.filter(n=>n.category===cat&&n._visible);
+      if(catNodes.length<1)return;
+      const points=catNodes.map(n=>[n.x,n.y]);
+      const hull=computeHull(points,45);
+      if(hull)hullPaths[cat].attr('d',smoothLine(hull));
+
+      // Label above hull
+      const cx=d3.mean(catNodes,n=>n.x);
+      const minY=d3.min(catNodes,n=>n.y);
+      const tw=cat.length*6+20;
+      hullLabels[cat].rect.attr('x',cx-tw/2).attr('y',minY-52).attr('width',tw).attr('height',22);
+      hullLabels[cat].text.attr('x',cx).attr('y',minY-37);
+    });
+
+    // Update connection lines (between category centroids)
+    const centroids={};
+    Object.keys(CATEGORIES).forEach(cat=>{
+      const cn=nodes.filter(n=>n.category===cat);
+      if(cn.length){centroids[cat]={x:d3.mean(cn,n=>n.x),y:d3.mean(cn,n=>n.y)};}
+    });
+    connLines.forEach(({cat,rc,line})=>{
+      const f=centroids[cat],t=centroids[rc];
+      if(f&&t)line.attr('x1',f.x).attr('y1',f.y).attr('x2',t.x).attr('y2',t.y);
+    });
+  }
+
+  // DRAG behavior
+  const drag=d3.drag()
+    .on('start',(e,d)=>{
+      if(!e.active)simulation.alphaTarget(0.3).restart();
+      d.fx=d.x;d.fy=d.y;
+      d3.select(e.sourceEvent.target.closest('g')).attr('cursor','grabbing');
+    })
+    .on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;})
+    .on('end',(e,d)=>{
+      if(!e.active)simulation.alphaTarget(0);
+      d.fx=null;d.fy=null;
+      d3.select(e.sourceEvent.target.closest('g')).attr('cursor','grab');
+    });
+  node.call(drag);
 
   // Tooltip
   const tooltip=document.getElementById('tooltip');
@@ -599,13 +651,13 @@ function initForceGraph(){
   node.on('click',(e,d)=>openModal(d.name));
 
   // Initial zoom to fit
-  svg.call(zoom.transform,d3.zoomIdentity.translate(W*0.05,H*0.05).scale(0.9));
+  svg.call(zoom.transform,d3.zoomIdentity.translate(W*0.02,H*0.02).scale(0.96));
 }
 
-function computeHull(points,padding=35){
+function computeHull(points,padding=45){
   if(points.length<3){
-    const cx=d3.mean(points,d=>d[0]),cy=d3.mean(points,d=>d[1]),r=padding+20;
-    const c=[];for(let a=0;a<Math.PI*2;a+=Math.PI/6)c.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r]);return c;
+    const cx=d3.mean(points,d=>d[0]),cy=d3.mean(points,d=>d[1]),r=padding+25;
+    const c=[];for(let a=0;a<Math.PI*2;a+=Math.PI/8)c.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r]);return c;
   }
   const hull=d3.polygonHull(points);if(!hull)return null;
   const cx=d3.mean(hull,d=>d[0]),cy=d3.mean(hull,d=>d[1]);
@@ -615,6 +667,7 @@ function computeHull(points,padding=35){
 function updateGraphVisibility(){
   if(!nodeSelection)return;
   nodeSelection.transition().duration(200).attr('opacity',d=>d._visible?1:0.1);
+  if(simulation)simulation.alpha(0.3).restart();
 }
 
 initForceGraph();
